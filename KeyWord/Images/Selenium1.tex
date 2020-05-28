@@ -1,0 +1,2337 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Selenium1}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{introduccion}{%
+\section{Introduccion}\label{introduccion}}
+
+    \hypertarget{quuxe9-es-el-seo}{%
+\subsection{¿Qué es el SEO?}\label{quuxe9-es-el-seo}}
+
+    El posicionamiento en buscadores u optimización de motores de búsqueda
+es el proceso de mejorar la visibilidad de un sitio web en los
+resultados orgánicos (los que no son pagados), de los diferentes
+buscadores. También es frecuente nombrarlo por su título inglés, SEO
+(Search Engine Optimization).
+
+\textbf{De la definición debemos quedarnos con dos ideas:}
+
+\begin{itemize}
+\tightlist
+\item
+  Aumento de la visibilidad: el objetivo del SEO es hacer que lleguen
+  más visitas a una página.
+\item
+  Posicionamiento en buscadores: aunque Google es el rey de los motores
+  de búsqueda (y siempre que hablamos de SEO nos referimos a Google), el
+  significado de SEO se aplica a todos los buscadores (Bing, Yahoo,
+  etc).
+\end{itemize}
+
+    
+
+    \hypertarget{por-quuxe9-es-el-seo-importante}{%
+\subsection{¿Por qué es el SEO
+importante?}\label{por-quuxe9-es-el-seo-importante}}
+
+La razón más importante por la que es necesario el SEO es porque hace
+más útil tu página web tanto para los usuarios como para los motores de
+búsqueda. Aunque estos aún no pueden ver una página web como lo hace un
+humano. El SEO es necesario para ayudar a los motores de búsqueda a
+entender sobre qué trata cada página y si es o no útil para los
+usuarios.
+
+Ademas presenta varias ventajas al implementar una estrategia SEO *
+Aumenta la visibilidad de una marca * Atrae tráfico cualificado * Genera
+oportunidades de ventas * Educar el mercado * Mejor rendimiento sobre la
+inversión
+
+    \hypertarget{keyword-research}{%
+\subsection{Keyword Research}\label{keyword-research}}
+
+\textbf{Las keywords son términos utilizados en los buscadores para
+expresar la información que los usuarios quieren encontrar en Internet.}
+
+Lo que separa el contenido de los usuarios se llama palabras clave o
+Keywords. Una palabra clave es el término que digitan los usuarios en
+los buscadores para encontrar contenidos que solucionen sus inquietudes.
+
+Por ejemplo, si una persona está planeando un viaje a Japón seguramente
+digitará ``mejores destinos en Japón'' o ``los destinos más económicos
+de Japón'' en la barra de búsqueda. Debemos realizar una investigación
+de palabras clave
+
+    El análisis y selección de keywords va a determinar casi todos los pasos
+que a seguir en la web.
+
+Desde la elección del dominio (aunque no siempre), pasando por los
+contenidos y continuando con la estrategia de enlaces.
+
+Por eso merece la pena realizar este esfuerzo al principio, porque no es
+de gusto descubrir que las palabras clave que se han escogido no aportan
+visitas, o atraen a los visitantes equivocados.
+
+    \hypertarget{quuxe9-keyword-deberuxeda-elegir}{%
+\subsubsection{¿Qué Keyword debería
+elegir?}\label{quuxe9-keyword-deberuxeda-elegir}}
+
+Deberían ser esas keywords que mejor definen el servicio web , los
+objetivos o el modelo de negocio.
+
+\begin{itemize}
+\item ~
+  \hypertarget{comenzar-con-las-keywords-muxe1s-genuxe9ricas.}{%
+  \paragraph{Comenzar con las Keywords más
+  genéricas.}\label{comenzar-con-las-keywords-muxe1s-genuxe9ricas.}}
+\item ~
+  \hypertarget{depurar-la-lista-de-keywords-enfocado-a-el-servicio-web.}{%
+  \paragraph{Depurar la lista de Keywords enfocado a el servicio
+  web.}\label{depurar-la-lista-de-keywords-enfocado-a-el-servicio-web.}}
+\item ~
+  \hypertarget{realizar-una-busqueda-con-palabras-muxe1s-especificas.}{%
+  \paragraph{Realizar una busqueda con palabras más
+  especificas.}\label{realizar-una-busqueda-con-palabras-muxe1s-especificas.}}
+\item ~
+  \hypertarget{depurar-la-nueva-lista-enfocado-a-la-web.}{%
+  \paragraph{Depurar la nueva lista enfocado a la
+  web.}\label{depurar-la-nueva-lista-enfocado-a-la-web.}}
+\end{itemize}
+
+    \hypertarget{codigo}{%
+\section{Codigo}\label{codigo}}
+
+    \hypertarget{definimos-las-funciones-iniciales}{%
+\subsection{Definimos las funciones
+Iniciales}\label{definimos-las-funciones-iniciales}}
+
+Vamos a definir las funciones iniciales para el Keyword research de
+nuestro proyecto.
+
+    \hypertarget{funcion-para-definir-el-idioma-y-la-palabra-clave-a-utilizar.}{%
+\subsubsection{Funcion para definir el idioma y la palabra clave a
+utilizar.}\label{funcion-para-definir-el-idioma-y-la-palabra-clave-a-utilizar.}}
+
+Aqui vamos a elegir nuestra Keyword y además, el idioma y el país donde
+vamos a realizar la busqueda.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{set\PYZus{}values}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Language:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{(1) Español}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{(2) English}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{language} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{p}{)}
+    \PY{k}{if} \PY{n+nb}{int}\PY{p}{(}\PY{n}{language}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+        \PY{n+nb}{print} \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Cuál es su Keyword?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{Keyword}\PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{ Tu palabra es:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Keyword}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{LANG} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{es}\PY{l+s+s2}{\PYZdq{}}
+        \PY{n}{CONT}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CO}\PY{l+s+s2}{\PYZdq{}}
+        \PY{k}{return} \PY{n}{Keyword}\PY{p}{,} \PY{n}{LANG}\PY{p}{,} \PY{n}{CONT}
+    \PY{k}{if} \PY{n+nb}{int}\PY{p}{(}\PY{n}{language}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{2}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{What is your keyword?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{Keyword}\PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Your word is:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Keyword}\PY{p}{)}
+        \PY{n}{LANG} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{en}\PY{l+s+s2}{\PYZdq{}}
+        \PY{n}{CONT}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{US}\PY{l+s+s2}{\PYZdq{}}
+        \PY{k}{return} \PY{n}{Keyword}\PY{p}{,} \PY{n}{LANG}\PY{p}{,} \PY{n}{CONT}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{funciones-para-escoger-una-nueva-palabra-y-realizar-todo-el-filtro.}{%
+\subsubsection{Funciones para escoger una nueva palabra y realizar todo
+el
+filtro.}\label{funciones-para-escoger-una-nueva-palabra-y-realizar-todo-el-filtro.}}
+
+En el caso que queramos escoger una nueva keyword, por medio de la
+función ya podremos aplicar todas las funciones
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{news}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{CONT} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{US}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Do you want to add another Keyword?}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(1) Yes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(2) No}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{choice} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{p}{)}
+    \PY{k}{if} \PY{n}{CONT} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{¿Desea añadir otra Keyword?}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(1) Si}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(2) No}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{choice} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{p}{)}
+    \PY{k}{return} \PY{n}{choice}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{new\PYZus{}keyword}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{a}\PY{p}{,}\PY{n}{b}\PY{p}{,}\PY{n}{c} \PY{o}{=} \PY{n}{set\PYZus{}values}\PY{p}{(}\PY{p}{)}
+    \PY{n}{erasecsvdata}\PY{p}{(}\PY{p}{)}
+    \PY{n}{downdata}\PY{p}{(}\PY{n}{a}\PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{c}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{reading\PYZus{}data}\PY{p}{(}\PY{n}{a}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{clean\PYZus{}zeros}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+    \PY{n}{keywording} \PY{o}{=} \PY{n}{Keymarcas}\PY{p}{(}\PY{n}{data}\PY{o}{.}\PY{n}{Keyword}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ Keywords}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{keywording}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{n}{getalldata}\PY{p}{(}\PY{n}{keywording}\PY{p}{,}\PY{n}{a}\PY{p}{)}
+    \PY{n}{dates}\PY{o}{=} \PY{n}{rec\PYZus{}data}\PY{p}{(}\PY{n}{a}\PY{p}{)}
+    \PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[} \PY{n}{keywords\PYZus{}data}\PY{p}{,} \PY{n}{dates}\PY{p}{]}\PY{p}{)}
+    \PY{n}{Key} \PY{o}{=} \PY{n}{keys}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+    \PY{n}{Key} \PY{o}{=} \PY{n}{textkey}\PY{p}{(}\PY{n}{Key}\PY{p}{)}
+    \PY{k}{return} \PY{n}{Key}\PY{p}{,}\PY{n}{data}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{funciuxf3n-para-eliminar-datos-con-keywords-anteriores-o-innecesarios.}{%
+\subsubsection{Función para eliminar datos con Keywords anteriores o
+innecesarios.}\label{funciuxf3n-para-eliminar-datos-con-keywords-anteriores-o-innecesarios.}}
+
+En el caso de tener algun csv repetido, o con alguna palabra que no
+vayamos a utilizar podemos eliminarlo
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{pathlib} \PY{k+kn}{import} \PY{n}{Path}
+\PY{n}{path} \PY{o}{=} \PY{n}{Path}\PY{o}{.}\PY{n}{cwd}\PY{p}{(}\PY{p}{)}
+\PY{k+kn}{import} \PY{n+nn}{shutil}\PY{o}{,} \PY{n+nn}{os}\PY{o}{,} \PY{n+nn}{sys}
+
+\PY{k}{def} \PY{n+nf}{erasecsvdata}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{csv\PYZus{}files}\PY{o}{=}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x}\PY{p}{,} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{k}{if} \PY{n}{CONT} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{n+nb}{print} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Estos son los CSV en tu carpeta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{csv\PYZus{}files}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{) \PYZhy{}\PYZgt{} }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{csv\PYZus{}files}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb}{print} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Escoge los numeros de los CSV que quieres eliminar o 0 para pasar (ejemplo 1,3)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{numero} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{p}{)}
+    \PY{k}{if} \PY{n}{CONT} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{US}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This are the CSV on your folder}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{csv\PYZus{}files}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ \PYZhy{}\PYZgt{} }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{csv\PYZus{}files}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Choose the numbers of the CSV that you want to delete or choose 0 to pass (example 1,3)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{numero} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{p}{)}
+    \PY{n}{A} \PY{o}{=} \PY{n}{numero}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{A} \PY{o}{=} \PY{p}{[}\PY{n+nb}{int}\PY{p}{(}\PY{n}{integer}\PY{p}{)} \PY{k}{for} \PY{n}{integer} \PY{o+ow}{in} \PY{n}{A}\PY{p}{]}
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{csv\PYZus{}files}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{}print(csv\PYZus{}files[j])}
+        \PY{k}{if} \PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1} \PY{o+ow}{in} \PY{n}{A}\PY{p}{:}
+            \PY{n}{os}\PY{o}{.}\PY{n}{remove}\PY{p}{(}\PY{n}{csv\PYZus{}files}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Los archivos restantes son:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n+nb}{print} \PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x}\PY{p}{,} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{funciones-para-descarga-de-datos}{%
+\subsection{Funciones para descarga de
+datos}\label{funciones-para-descarga-de-datos}}
+
+Luego de definir nuestra Keyword objetivo, creamos las funciones para
+realizar la busqueda.
+
+    \hypertarget{funciuxf3n-para-descargar-los-datos-de-la-keyword-principal.}{%
+\subsubsection{Función para descargar los datos de la Keyword
+Principal.}\label{funciuxf3n-para-descargar-los-datos-de-la-keyword-principal.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{selenium} \PY{k+kn}{import} \PY{n}{webdriver}
+\PY{k+kn}{from} \PY{n+nn}{selenium}\PY{n+nn}{.}\PY{n+nn}{webdriver} \PY{k+kn}{import} \PY{n}{Chrome}
+\PY{k+kn}{from} \PY{n+nn}{selenium}\PY{n+nn}{.}\PY{n+nn}{webdriver}\PY{n+nn}{.}\PY{n+nn}{support}\PY{n+nn}{.}\PY{n+nn}{ui} \PY{k+kn}{import} \PY{n}{Select}
+\PY{k+kn}{from} \PY{n+nn}{selenium}\PY{n+nn}{.}\PY{n+nn}{webdriver}\PY{n+nn}{.}\PY{n+nn}{common}\PY{n+nn}{.}\PY{n+nn}{keys} \PY{k+kn}{import} \PY{n}{Keys}
+
+\PY{k+kn}{import} \PY{n+nn}{time}
+
+
+\PY{k}{def} \PY{n+nf}{downdata}\PY{p}{(}\PY{n}{Keyword}\PY{p}{,}\PY{n}{LANG}\PY{p}{,} \PY{n}{CONT}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{exists}\PY{p}{(} \PY{n}{Keyword} \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{==} \PY{k+kc}{False}\PY{p}{:}
+        \PY{n}{options} \PY{o}{=} \PY{n}{webdriver}\PY{o}{.}\PY{n}{ChromeOptions}\PY{p}{(}\PY{p}{)}
+        \PY{n}{prefs} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{download.default\PYZus{}directory}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n+nb}{str}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{p}{\PYZcb{}}
+        \PY{n}{options}\PY{o}{.}\PY{n}{add\PYZus{}experimental\PYZus{}option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{prefs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{prefs}\PY{p}{)}
+        \PY{n}{browser} \PY{o}{=} \PY{n}{webdriver}\PY{o}{.}\PY{n}{Chrome}\PY{p}{(}\PY{n}{executable\PYZus{}path}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{chromedriver}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{options} \PY{o}{=} \PY{n}{options}\PY{p}{)} 
+        \PY{n}{browser}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://cocolyze.com/en/google\PYZhy{}keyword\PYZhy{}planner\PYZhy{}tool\PYZsh{}null}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+        \PY{n}{username} \PY{o}{=} \PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}element\PYZus{}by\PYZus{}id}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keyword}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{username}\PY{o}{.}\PY{n}{send\PYZus{}keys}\PY{p}{(}\PY{n}{Keyword}\PY{p}{)}
+
+
+        \PY{n}{select\PYZus{}Country} \PY{o}{=} \PY{n}{Select}\PY{p}{(}\PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}element\PYZus{}by\PYZus{}id}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+        \PY{n}{select\PYZus{}Country}\PY{o}{.}\PY{n}{select\PYZus{}by\PYZus{}value}\PY{p}{(}\PY{n}{CONT}\PY{p}{)}
+
+        \PY{n}{select\PYZus{}lang} \PY{o}{=} \PY{n}{Select}\PY{p}{(}\PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}element\PYZus{}by\PYZus{}id}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lang}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+        \PY{n}{select\PYZus{}lang}\PY{o}{.}\PY{n}{select\PYZus{}by\PYZus{}value}\PY{p}{(}\PY{n}{LANG}\PY{p}{)}
+
+        \PY{n}{button} \PY{o}{=} \PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}element\PYZus{}by\PYZus{}id}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{submitBtn}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{button}\PY{o}{.}\PY{n}{click}\PY{p}{(}\PY{p}{)}
+
+
+        \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{)}
+
+        \PY{n}{ids} \PY{o}{=} \PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}elements\PYZus{}by\PYZus{}xpath}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{//*[@href]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{k}{for} \PY{n}{ii} \PY{o+ow}{in} \PY{n}{ids}\PY{p}{:}
+            \PY{c+c1}{\PYZsh{}print (ii.text)}
+            \PY{k}{if} \PY{n}{ii}\PY{o}{.}\PY{n}{text} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CSV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                \PY{n}{download} \PY{o}{=} \PY{n}{ii}
+        \PY{c+c1}{\PYZsh{}print (download.text)}
+        \PY{n}{download}\PY{o}{.}\PY{n}{click}\PY{p}{(}\PY{p}{)}
+
+
+        \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}
+        \PY{n}{browser}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+        \PY{n}{os}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{suggestion.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{Keyword}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{funciuxf3n-para-descargar-los-datos-para-todos-los-keywords-de-una-lista.}{%
+\subsubsection{Función para descargar los datos para todos los keywords
+de una
+lista.}\label{funciuxf3n-para-descargar-los-datos-para-todos-los-keywords-de-una-lista.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{getalldata}\PY{p}{(}\PY{n}{Keywording}\PY{p}{,}\PY{n}{Keyword}\PY{p}{)}\PY{p}{:}
+    \PY{n}{dire} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Data\PYZus{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+} \PY{n}{Keyword}
+    \PY{k}{try}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Create target Directory}
+        \PY{n}{os}\PY{o}{.}\PY{n}{mkdir}\PY{p}{(}\PY{n}{dire}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Directory Created}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} 
+    \PY{k}{except} \PY{n+ne}{FileExistsError}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Directory already exists}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{options} \PY{o}{=} \PY{n}{webdriver}\PY{o}{.}\PY{n}{ChromeOptions}\PY{p}{(}\PY{p}{)}
+    \PY{n}{prefs} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{download.default\PYZus{}directory}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n+nb}{str}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{options}\PY{o}{.}\PY{n}{add\PYZus{}experimental\PYZus{}option}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{prefs}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{prefs}\PY{p}{)}
+    \PY{n}{browser} \PY{o}{=} \PY{n}{webdriver}\PY{o}{.}\PY{n}{Chrome}\PY{p}{(}\PY{n}{executable\PYZus{}path}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{chromedriver}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{options} \PY{o}{=} \PY{n}{options}\PY{p}{)} 
+    \PY{n}{browser}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{https://cocolyze.com/en/google\PYZhy{}keyword\PYZhy{}planner\PYZhy{}tool\PYZsh{}null}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Keywording}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{exists}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Data\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n}{Keyword} \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n}{Keywording}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+            \PY{k}{continue}
+        \PY{k}{elif} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{exists}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Data\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n}{Keyword}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+} \PY{n}{Keywording}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{==} \PY{k+kc}{False} \PY{p}{:}
+            \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+            \PY{n}{username} \PY{o}{=} \PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}element\PYZus{}by\PYZus{}id}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keyword}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{username}\PY{o}{.}\PY{n}{clear}\PY{p}{(}\PY{p}{)}
+            \PY{n}{username}\PY{o}{.}\PY{n}{send\PYZus{}keys}\PY{p}{(}\PY{n}{Keywording}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+
+            \PY{n}{select\PYZus{}Country} \PY{o}{=} \PY{n}{Select}\PY{p}{(}\PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}element\PYZus{}by\PYZus{}id}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{country}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{select\PYZus{}Country}\PY{o}{.}\PY{n}{select\PYZus{}by\PYZus{}value}\PY{p}{(}\PY{n}{CONT}\PY{p}{)}
+            \PY{n}{select\PYZus{}lang} \PY{o}{=} \PY{n}{Select}\PY{p}{(}\PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}element\PYZus{}by\PYZus{}id}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lang}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{select\PYZus{}lang}\PY{o}{.}\PY{n}{select\PYZus{}by\PYZus{}value}\PY{p}{(}\PY{n}{LANG}\PY{p}{)}
+            \PY{n}{button} \PY{o}{=} \PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}element\PYZus{}by\PYZus{}id}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{submitBtn}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            \PY{n}{button}\PY{o}{.}\PY{n}{click}\PY{p}{(}\PY{p}{)}
+            \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{)}
+            \PY{n}{ids} \PY{o}{=} \PY{n}{browser}\PY{o}{.}\PY{n}{find\PYZus{}elements\PYZus{}by\PYZus{}xpath}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{//*[@href]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{for} \PY{n}{ii} \PY{o+ow}{in} \PY{n}{ids}\PY{p}{:}
+                \PY{c+c1}{\PYZsh{}print (ii.text)}
+                \PY{k}{if} \PY{n}{ii}\PY{o}{.}\PY{n}{text} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CSV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                    \PY{n}{download} \PY{o}{=} \PY{n}{ii}
+            \PY{c+c1}{\PYZsh{}print (download.text)}
+            \PY{n}{download}\PY{o}{.}\PY{n}{click}\PY{p}{(}\PY{p}{)}
+
+            \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+  
+            \PY{n}{os}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{suggestion.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}  \PY{n}{Keywording}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+            \PY{n}{shutil}\PY{o}{.}\PY{n}{move}\PY{p}{(}\PY{n}{Keywording}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{str}\PY{p}{(}\PY{n}{path}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{Data\PYZus{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+} \PY{n}{Keyword}\PY{p}{)}
+            \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{All data downloaded}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{browser}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{entramos-los-valores-y-keyword-para-nuestro-seo}{%
+\subsection{Entramos los valores y Keyword para nuestro
+SEO}\label{entramos-los-valores-y-keyword-para-nuestro-seo}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Keyword}\PY{p}{,} \PY{n}{LANG}\PY{p}{,} \PY{n}{CONT} \PY{o}{=} \PY{n}{set\PYZus{}values}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Language:
+(1) Español
+(2) English
+2
+What is your keyword?
+Pants
+Your word is: Pants
+    \end{Verbatim}
+
+    \hypertarget{borramos-archivos-innecesarios-de-alguna-keyword-erronea.}{%
+\subsubsection{Borramos archivos innecesarios de alguna keyword
+erronea.}\label{borramos-archivos-innecesarios-de-alguna-keyword-erronea.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{erasecsvdata}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+This are the CSV on your folder
+(1 -> all\_data\_copy.csv)
+(2 -> all\_data\_Pants.csv)
+(3 -> all\_data\_sweatshirt.csv)
+(4 -> nikeid sweatshirt1.csv)
+(5 -> Pants.csv)
+(6 -> sweatshirt.csv)
+Choose the numbers of the CSV that you want to delete or choose 0 to pass
+(example 1,3)
+1,2,3,4
+Los archivos restantes son:
+['Pants.csv', 'sweatshirt.csv']
+    \end{Verbatim}
+
+    \hypertarget{descargamos-los-datos.}{%
+\subsubsection{Descargamos los datos.}\label{descargamos-los-datos.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{downdata}\PY{p}{(}\PY{n}{Keyword}\PY{p}{,}\PY{n}{LANG}\PY{p}{,} \PY{n}{CONT}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{lectura-y-limpieza-de-datos}{%
+\subsection{Lectura y limpieza de
+datos}\label{lectura-y-limpieza-de-datos}}
+
+Ahora vamos a leer y limpiar el dataset descargado.
+
+    \hypertarget{leemos-el-dataset-bajo-las-columnas-que-necesitamos.}{%
+\subsubsection{Leemos el dataset bajo las columnas que
+necesitamos.}\label{leemos-el-dataset-bajo-las-columnas-que-necesitamos.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k}{def} \PY{n+nf}{reading\PYZus{}data}\PY{p}{(}\PY{n}{Keyword}\PY{p}{)}\PY{p}{:}
+    \PY{n}{col\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Keyword}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Search Volume}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CPC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{keyword\PYZus{}Data}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{Keyword}\PY{o}{+}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sep} \PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{;}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{usecols}\PY{o}{=}\PY{n}{col\PYZus{}list}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{n}{keyword\PYZus{}Data}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{keyword\PYZus{}Data}
+\PY{n}{keyword\PYZus{}Data} \PY{o}{=} \PY{n}{reading\PYZus{}data}\PY{p}{(}\PY{n}{Keyword}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+                   Keyword  Search Volume   CPC
+0           carolina pants         823000  1.11
+1  sponge bob square pants         246000  0.94
+2              sweat pants         165000  1.06
+3               pants yoga         165000  1.27
+4               yoga pants         165000  1.83
+    \end{Verbatim}
+
+    \hypertarget{revisamos-si-existen-datos-vacios-y-eliminamos-las-filas-con-datos-iguales-a-cero.}{%
+\subsubsection{Revisamos si existen datos vacios y eliminamos las filas
+con datos iguales a
+cero.}\label{revisamos-si-existen-datos-vacios-y-eliminamos-las-filas-con-datos-iguales-a-cero.}}
+
+Quitamos todos los datos con algún valor a cero ya que esto significa
+que no hay informacion acerca del volumen de busqueda o del costo por
+clic para la palabra correspondiente. Además, en caso que eliminemos más
+del 40\% de la informacion, lanzamos una advertencia ya que es una
+perdida muy grande de información.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{clean\PYZus{}zeros}\PY{p}{(}\PY{n}{keyword\PYZus{}Data}\PY{p}{)}\PY{p}{:}
+    \PY{n}{col\PYZus{}names}\PY{o}{=} \PY{n}{keyword\PYZus{}Data}\PY{o}{.}\PY{n}{columns}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+    \PY{k}{for} \PY{n}{column} \PY{o+ow}{in} \PY{n}{col\PYZus{}names}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Null Data in }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{ = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{column}\PY{p}{,}\PY{n}{keyword\PYZus{}Data}\PY{p}{[}\PY{n}{column}\PY{p}{]}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{Total} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{keyword\PYZus{}Data}\PY{p}{)}
+    \PY{k}{for} \PY{n}{column} \PY{o+ow}{in} \PY{n}{col\PYZus{}names}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{:}
+         \PY{n}{fixed} \PY{o}{=} \PY{n}{keyword\PYZus{}Data}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{keyword\PYZus{}Data}\PY{p}{[}\PY{n}{column}\PY{p}{]} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{]}
+            
+    \PY{n}{Ft}\PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{fixed}\PY{p}{)}
+    \PY{n}{rang} \PY{o}{=} \PY{p}{(}\PY{n}{Ft}\PY{o}{/}\PY{n}{Total}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{100}
+   
+    \PY{k}{if} \PY{n}{CONT} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+        \PY{k}{if} \PY{n}{rang} \PY{o}{\PYZlt{}} \PY{l+m+mi}{60}\PY{p}{:}
+            \PY{n+nb}{print} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Se presenta más del 40}\PY{l+s+si}{\PYZpc{} d}\PY{l+s+s1}{e datos sucios, se recomienda usar otra palabra}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{k}{else} \PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Tienes un buen dataset, continua}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{if} \PY{n}{CONT} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{US}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} 
+        \PY{k}{if} \PY{n}{rang} \PY{o}{\PYZlt{}} \PY{l+m+mi}{60}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The Data has 40}\PY{l+s+si}{\PYZpc{} o}\PY{l+s+s1}{f Null data, you should use another Keyword}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Great Dataset! Continue}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{fixed}
+
+
+
+\PY{n}{keyword\PYZus{}Data} \PY{o}{=} \PY{n}{clean\PYZus{}zeros}\PY{p}{(}\PY{n}{keyword\PYZus{}Data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Null Data in Keyword = 0
+
+
+Null Data in Search Volume = 0
+
+
+Null Data in CPC = 0
+
+
+Great Dataset! Continue
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{keyword\PYZus{}Data}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{30}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                                  Keyword  Search Volume   CPC
+0                          carolina pants         823000  1.11
+1                 sponge bob square pants         246000  0.94
+2                             sweat pants         165000  1.06
+3                              pants yoga         165000  1.27
+4                              yoga pants         165000  1.83
+5                                   pants         135000  1.04
+6                        nike sweat pants         135000  0.49
+7                             men's jeans         135000  2.12
+8                                   shirt         135000  0.86
+9                                    tops         135000  0.97
+10                            pants cargo         110000  0.99
+11                            cargo pants         110000  0.97
+12                            khaki pants          90500  1.54
+13  the sisterhood of the traveling pants          90500  0.22
+14                          pants dickies          74000  0.87
+15                           dickie pants          74000  0.77
+16                                  khaki          74000  1.26
+17                     women's suit pants          60500  0.80
+18                      pants suit womens          60500  0.93
+19                   sweater pants womens          60500  1.12
+20                     cargo pants womens          60500  0.92
+21                            plaid pants          60500  0.74
+22                women\&\#39;s cargo pants          60500  0.85
+23                    women's pants suits          60500  0.96
+24                      men's sweat pants          60500  2.04
+25                          palazzo pants          60500  0.87
+26                      women cargo pants          60500  0.97
+27     sisterhood of the travelling pants          60500  0.12
+28                     suit pants women's          60500  0.96
+29                 cargo pants for womens          60500  0.95
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{hacemos-un-filtro-sobre-las-marcas-que-queremos-analizar.}{%
+\subsection{Hacemos un filtro sobre las marcas que queremos
+analizar.}\label{hacemos-un-filtro-sobre-las-marcas-que-queremos-analizar.}}
+
+Queremos filtrar nuestro dataset respecto a las palabras que estan
+relacionadas con los productos o marcas que queremos ``ofrecer''.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Marcas}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nike}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adidas}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Puma}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nautica}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Levis}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Under Armour}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Zara}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Diadora}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Carolina}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{fuzzy-wuzzy}{%
+\subsection{\texorpdfstring{\textbf{FUZZY
+WUZZY}}{FUZZY WUZZY}}\label{fuzzy-wuzzy}}
+
+FuzzyWuzzy es una biblioteca de Python que se utiliza para la
+coincidencia de cadenas de texto. La coincidencia de cadenas difusa es
+el proceso de encontrar cadenas que coinciden con un patrón dado.
+Básicamente utiliza la distancia de \textbf{Levenshtein} para calcular
+las diferencias entre secuencias.
+
+\hypertarget{distancia-de-levenshtein}{%
+\subsubsection{Distancia de
+Levenshtein}\label{distancia-de-levenshtein}}
+
+La distancia de Levenshtein es una métrica para medir la diferencia
+entre dos secuencias. Informalmente, la distancia de Levenshtein entre
+dos palabras es el número mínimo de ediciones de un solo carácter (es
+decir, inserciones, eliminaciones o sustituciones) requeridas para
+cambiar una palabra en la otra.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{fuzzywuzzy} \PY{k+kn}{import} \PY{n}{process}\PY{p}{,} \PY{n}{fuzz}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+C:\textbackslash{}Users\textbackslash{}Pinnzon\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}fuzzywuzzy\textbackslash{}fuzz.py:11: UserWarning:
+Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove
+this warning
+  warnings.warn('Using slow pure-python SequenceMatcher. Install python-
+Levenshtein to remove this warning')
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}matches}\PY{p}{(}\PY{n}{query}\PY{p}{,} \PY{n}{choices}\PY{p}{,} \PY{n}{limit}\PY{o}{=}\PY{l+m+mi}{30}\PY{p}{)}\PY{p}{:}
+    \PY{n}{results} \PY{o}{=} \PY{n}{process}\PY{o}{.}\PY{n}{extract}\PY{p}{(}\PY{n}{query}\PY{p}{,} \PY{n}{choices}\PY{p}{,} \PY{n}{limit} \PY{o}{=} \PY{n}{limit}\PY{p}{,} \PY{n}{scorer} \PY{o}{=} \PY{n}{fuzz}\PY{o}{.}\PY{n}{partial\PYZus{}ratio}\PY{p}{)}
+    \PY{k}{return} \PY{n}{results} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{hacemos-un-filtro-sobre-nuestro-conjunto-de-palabras-con-aquellas-que-tengan-mas-de-un-90-de-coincidencia-con-nuestras-marcas.}{%
+\subsubsection{Hacemos un filtro sobre nuestro conjunto de palabras con
+aquellas que tengan mas de un 90\% de coincidencia con nuestras
+marcas.}\label{hacemos-un-filtro-sobre-nuestro-conjunto-de-palabras-con-aquellas-que-tengan-mas-de-un-90-de-coincidencia-con-nuestras-marcas.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Keymarcas}\PY{p}{(}\PY{n}{Keyword}\PY{p}{)}\PY{p}{:}
+    \PY{n}{keywords}\PY{o}{=}\PY{p}{[}\PY{p}{]}
+    \PY{k}{for} \PY{n}{marca} \PY{o+ow}{in} \PY{n}{Marcas}\PY{p}{:}
+        \PY{n}{data} \PY{o}{=} \PY{n}{get\PYZus{}matches}\PY{p}{(}\PY{n}{marca}\PY{p}{,}\PY{n}{Keyword}\PY{p}{)}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{k}{if} \PY{n}{data}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZgt{}} \PY{l+m+mi}{90}\PY{p}{:}
+                \PY{n}{keywords}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} 
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{keywords}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{n}{keywords}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{=}\PY{n}{keywords}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{k}{return} \PY{n}{keywords}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{keywords} \PY{o}{=} \PY{n}{Keymarcas}\PY{p}{(}\PY{n}{keyword\PYZus{}Data}\PY{o}{.}\PY{n}{Keyword}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{keywords}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+['nike sweat pants',
+ 'nike womens sweat pants',
+ 'nike sweat pants for men',
+ "nike men's sweat pants",
+ "men's nike pants",
+ 'nike pants mens',
+ 'nike pants for men',
+ 'nike mens pants',
+ 'track pants nike',
+ 'nike track pants',
+ 'nike fleece tech pants',
+ "nike women's pants",
+ "women's nike pants",
+ "nike pants women's",
+ 'nike gold pants',
+ 'nikelab womens pants',
+ 'nike tech fleece pants',
+ 'nike pants tech fleece',
+ 'adidas pants',
+ 'adidas tracksuit pants',
+ 'tracksuit pants adidas',
+ 'track pants adidas',
+ 'adidas pants womens',
+ 'adidas women pants',
+ 'adidas pants for men',
+ "women's adidas pants",
+ "adidas men's pants",
+ 'men adidas pants',
+ 'adidas tiro 17 pants',
+ 'adidas pants red',
+ 'adidas pants soccer',
+ 'adidas pants tiro 17',
+ 'adidas soccer pants',
+ 'adidas red pants',
+ 'under armor pants',
+ 'underarmour sweat pants',
+ 'carolina pants']
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{para-cada-palabra-encontrada-volvemos-a-realizar-un-keyword-research}{%
+\subsubsection{Para cada palabra encontrada, volvemos a realizar un
+Keyword
+Research}\label{para-cada-palabra-encontrada-volvemos-a-realizar-un-keyword-research}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{getalldata}\PY{p}{(}\PY{n}{keywords} \PY{p}{,}\PY{n}{Keyword}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Directory already exists
+All data downloaded
+    \end{Verbatim}
+
+    \hypertarget{leemos-y-concatenamos-todas-las-palabras-encontradas-por-cada-keyword-de-nuestra-lista-filtrada}{%
+\paragraph{Leemos y concatenamos todas las palabras encontradas por cada
+Keyword de nuestra lista
+filtrada}\label{leemos-y-concatenamos-todas-las-palabras-encontradas-por-cada-keyword-de-nuestra-lista-filtrada}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{rec\PYZus{}data}\PY{p}{(}\PY{n}{Keyword}\PY{p}{)}\PY{p}{:}
+    \PY{n}{path\PYZus{}2} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Data\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+}\PY{n}{Keyword}
+    \PY{n}{files} \PY{o}{=} \PY{p}{[}\PY{n}{file} \PY{k}{for} \PY{n}{file} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{n}{path\PYZus{}2}\PY{p}{)} \PY{k}{if} \PY{o+ow}{not} \PY{n}{file}\PY{o}{.}\PY{n}{startswith}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]} \PY{c+c1}{\PYZsh{} Ignore hidden files}
+    \PY{n}{col\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Keyword}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Search Volume}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CPC}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{keywords\PYZus{}data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{for} \PY{n}{file} \PY{o+ow}{in} \PY{n}{files}\PY{p}{:}
+        \PY{n}{current\PYZus{}data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{path\PYZus{}2}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n}{file}\PY{p}{,} \PY{n}{sep} \PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{;}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{usecols} \PY{o}{=} \PY{n}{col\PYZus{}list}\PY{p}{)}
+        \PY{n}{keywords\PYZus{}data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{keywords\PYZus{}data}\PY{p}{,} \PY{n}{current\PYZus{}data}\PY{p}{]}\PY{p}{)}
+    \PY{k}{for}  \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{keywords}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{n}{keywords\PYZus{}data}\PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{keywords\PYZus{}data}\PY{p}{,}\PY{n}{keyword\PYZus{}Data}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{keyword\PYZus{}Data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Keyword}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{n}{keywords}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+    
+    \PY{n}{keywords\PYZus{}data}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{all\PYZus{}data\PYZus{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n}{Keyword}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+    \PY{k}{return} \PY{n}{keywords\PYZus{}data}
+\PY{n}{keywords\PYZus{}data} \PY{o}{=} \PY{n}{rec\PYZus{}data}\PY{p}{(}\PY{n}{Keyword}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{keywords\PYZus{}data}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                  Keyword  Search Volume   CPC
+0      adidas pants men's          18100  1.46
+1      adidas men's pants          18100  1.46
+2      men's adidas pants          18100  1.46
+3      adidas joggers men          18100  1.84
+4  adidas joggers women's          18100  1.34
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{eliminamos-todas-las-palabras-que-tengan-un-volumen-de-busqueda-menor-al-promedio-y-aquellas-que-esten-repetidas}{%
+\paragraph{Eliminamos todas las palabras que tengan un volumen de
+busqueda menor al promedio y aquellas que esten
+repetidas}\label{eliminamos-todas-las-palabras-que-tengan-un-volumen-de-busqueda-menor-al-promedio-y-aquellas-que-esten-repetidas}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{keys}\PY{p}{(}\PY{n}{keywords\PYZus{}data}\PY{p}{)}\PY{p}{:}
+    \PY{n}{keywords\PYZus{}data} \PY{o}{=} \PY{n}{keywords\PYZus{}data}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Search Volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+    \PY{n}{keywords\PYZus{}data}\PY{o}{=} \PY{n}{keywords\PYZus{}data}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+    \PY{n}{keywords\PYZus{}data}\PY{o}{=} \PY{n}{keywords\PYZus{}data}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{keywords\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Search Volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{\PYZgt{}} \PY{n}{keywords\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Search Volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+
+    \PY{n}{Key}\PY{o}{=} \PY{n}{keywords\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Keyword}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+    \PY{n}{Key} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{dict}\PY{o}{.}\PY{n}{fromkeys}\PY{p}{(}\PY{n}{Key}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{Key}
+\PY{n}{Key} \PY{o}{=} \PY{n}{keys}\PY{p}{(}\PY{n}{keywords\PYZus{}data}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{extraemos-las-palabras-como-texto-y-eliminamos-cualquier-mayuscula-para-un-menor-procesamiento-de-datos}{%
+\paragraph{Extraemos las palabras como texto y eliminamos cualquier
+mayuscula para un menor procesamiento de
+datos}\label{extraemos-las-palabras-como-texto-y-eliminamos-cualquier-mayuscula-para-un-menor-procesamiento-de-datos}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{textkey}\PY{p}{(}\PY{n}{Key}\PY{p}{)}\PY{p}{:}
+    \PY{n}{Key} \PY{o}{=} \PY{p}{[}\PY{n}{text}\PY{o}{.}\PY{n}{lower}\PY{p}{(}\PY{p}{)} \PY{k}{for} \PY{n}{text} \PY{o+ow}{in} \PY{n}{Key}\PY{p}{]}
+    \PY{k}{return} \PY{n}{Key}
+\PY{n}{Key} \PY{o}{=} \PY{n}{textkey}\PY{p}{(}\PY{n}{Key}\PY{p}{)}
+\PY{n}{Key}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{30}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+['nike',
+ 'nfl schedule',
+ 'adidas',
+ 'nfl news',
+ 'under armour',
+ 'nike shoes',
+ 'carolina pants',
+ 'patriots schedule',
+ 'panthers',
+ 'nike outlet',
+ 'adidas shoes',
+ 'nfl shop',
+ 'saints schedule',
+ 'nike shoes for men',
+ 'under armour outlet',
+ 'nike backpacks',
+ 'sweatpants',
+ 'nike air max womens',
+ 'adidas womens shoes',
+ 'nike sweatpants',
+ 'under armour shoes',
+ 'nike sweat pants',
+ 'nike shorts',
+ 'adidas shoes for men',
+ 'adidas outlet',
+ 'joggers for men',
+ 'nike windbreaker',
+ "men's joggers",
+ 'nike women',
+ 'nike headbands']
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{insertar-otra-keyword}{%
+\subsection{Insertar otra Keyword}\label{insertar-otra-keyword}}
+
+En el caso que queramos combinar nuestra palabra inicial y queremos
+añadir más relacionadas a nuestro producto aqui lo podremos realizar
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+    \PY{n}{choice} \PY{o}{=} \PY{n}{news}\PY{p}{(}\PY{p}{)}
+    \PY{k}{if} \PY{n+nb}{int}\PY{p}{(}\PY{n}{choice}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+        \PY{n}{Key}\PY{p}{,}\PY{n}{data} \PY{o}{=} \PY{n}{new\PYZus{}keyword}\PY{p}{(}\PY{p}{)}
+    \PY{k}{else}\PY{p}{:}
+        \PY{k}{break}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Do you want to add another Keyword?
+(1) Yes
+(2) No
+1
+Language:
+(1) Español
+(2) English
+2
+What is your keyword?
+sweatshirt
+Your word is: sweatshirt
+This are the CSV on your folder
+(1 -> all\_data\_Pants.csv)
+(2 -> Pants.csv)
+(3 -> sweatshirt.csv)
+Choose the numbers of the CSV that you want to delete or choose 0 to pass
+(example 1,3)
+0
+Los archivos restantes son:
+['all\_data\_Pants.csv', 'Pants.csv', 'sweatshirt.csv']
+               Keyword  Search Volume   CPC
+0           sweatshirt         165000  1.05
+1      hoodies for men         165000  1.18
+2  champion sweatshirt         110000  0.68
+3  sweatshirt champion         110000  0.66
+4    nikeid sweatshirt          74000  0.50
+Null Data in Keyword = 0
+
+
+Null Data in Search Volume = 0
+
+
+Null Data in CPC = 0
+
+
+Great Dataset! Continue
+62 Keywords
+Directory already exists
+All data downloaded
+Do you want to add another Keyword?
+(1) Yes
+(2) No
+2
+    \end{Verbatim}
+
+    \hypertarget{ultimo-filtro}{%
+\subsection{Ultimo Filtro}\label{ultimo-filtro}}
+
+Realizamos un ultimo filtro con las marcas seleccionadas en caso que
+hayan keywords poco relacionadas de las nuevas busquedas
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Key} \PY{o}{=} \PY{n}{Keymarcas}\PY{p}{(}\PY{n}{Key}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Key}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{30}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+['nike',
+ 'nike shoes',
+ 'nike outlet',
+ 'nike hoodie',
+ 'nike hoodies',
+ 'hoodies nike',
+ 'nike shoes for men',
+ 'nike backpacks',
+ 'nike sweatpants',
+ 'nike sweat pants',
+ 'nike id',
+ 'nike air max womens',
+ 'nike shorts',
+ 'nike windbreaker',
+ 'nike sweatsuit',
+ 'nike joggers',
+ 'nike sweatshirts',
+ 'nike sweatshirt',
+ 'nike t shirt',
+ 'nike white shoes',
+ 'nike jacket',
+ 'nike women',
+ 'nikeid sweatshirt',
+ 'nike headbands',
+ 'sweatshirts nike',
+ 'nike hoodie men',
+ 'nike leggings',
+ "men's nike hoodie",
+ 'nike hoodies men',
+ 'sweatshirt nike']
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{generando-textos-por-medio-lstm}{%
+\section{Generando textos por medio
+LSTM}\label{generando-textos-por-medio-lstm}}
+
+    \hypertarget{caso-1}{%
+\subsection{Caso 1}\label{caso-1}}
+
+Vamos a realizar una RNN regular vectorizando nuestras palabras y
+entrenando el modelo para realizar una prediccion Primero vamos a dejar
+todas nuestras palabras como texto, y eliminamos cualquier signo de
+puntuación
+
+    \hypertarget{cargamos-todos-los-paquetes-necesarios-para-realizar-nuestra-rnn-por-lstm}{%
+\paragraph{Cargamos todos los paquetes necesarios para realizar nuestra
+RNN por
+LSTM}\label{cargamos-todos-los-paquetes-necesarios-para-realizar-nuestra-rnn-por-lstm}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{re}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{models} \PY{k+kn}{import} \PY{n}{Sequential}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{layers} \PY{k+kn}{import} \PY{n}{Dense}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{layers} \PY{k+kn}{import} \PY{n}{Dropout}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{layers} \PY{k+kn}{import} \PY{n}{LSTM}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{callbacks} \PY{k+kn}{import} \PY{n}{ModelCheckpoint}
+\PY{k+kn}{from} \PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{utils} \PY{k+kn}{import} \PY{n}{np\PYZus{}utils}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Using TensorFlow backend.
+    \end{Verbatim}
+
+    \hypertarget{hacemos-de-nuestras-keywords-un-solo-texto}{%
+\paragraph{Hacemos de nuestras Keywords un solo
+texto}\label{hacemos-de-nuestras-keywords-un-solo-texto}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Key\PYZus{}Text}\PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{, }\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{Key}\PY{p}{)}
+\PY{n}{processed\PYZus{}text} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{[\PYZca{}a\PYZhy{}zA\PYZhy{}Z]}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{Key\PYZus{}Text}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{le-damos-asignamos-un-valor-a-todos-los-signos-del-vocabulario-que-se-encuentren-en-el-texto}{%
+\paragraph{Le damos asignamos un valor a todos los signos del
+vocabulario que se encuentren en el
+texto}\label{le-damos-asignamos-un-valor-a-todos-los-signos-del-vocabulario-que-se-encuentren-en-el-texto}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{chars} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{Key\PYZus{}Text}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{char\PYZus{}to\PYZus{}int} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{(}\PY{n}{c}\PY{p}{,} \PY{n}{i}\PY{p}{)} \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{c} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}
+\PY{n}{char\PYZus{}to\PYZus{}int}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\{' ': 0,
+ "'": 1,
+ ',': 2,
+ '0': 3,
+ '1': 4,
+ '2': 5,
+ '3': 6,
+ '4': 7,
+ '5': 8,
+ '6': 9,
+ '7': 10,
+ '9': 11,
+ 'a': 12,
+ 'b': 13,
+ 'c': 14,
+ 'd': 15,
+ 'e': 16,
+ 'f': 17,
+ 'g': 18,
+ 'h': 19,
+ 'i': 20,
+ 'j': 21,
+ 'k': 22,
+ 'l': 23,
+ 'm': 24,
+ 'n': 25,
+ 'o': 26,
+ 'p': 27,
+ 'r': 28,
+ 's': 29,
+ 't': 30,
+ 'u': 31,
+ 'v': 32,
+ 'w': 33,
+ 'x': 34,
+ 'y': 35,
+ 'z': 36\}
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{n\PYZus{}chars} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{Key\PYZus{}Text}\PY{p}{)}
+\PY{n}{n\PYZus{}vocab} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{chars}\PY{p}{)}
+\PY{n+nb}{print} \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total Characters: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{n\PYZus{}chars}\PY{p}{)}
+\PY{n+nb}{print} \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total Vocab: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{n\PYZus{}vocab}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Total Characters:  2798
+Total Vocab:  37
+    \end{Verbatim}
+
+    \hypertarget{ahora-convertimmos-vectorizammos-nuestras-palabras-por-medio-de-la-tokenizaciuxf3n-anterior}{%
+\paragraph{Ahora convertimmos vectorizammos nuestras palabras por medio
+de la tokenización
+anterior}\label{ahora-convertimmos-vectorizammos-nuestras-palabras-por-medio-de-la-tokenizaciuxf3n-anterior}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{seq\PYZus{}length} \PY{o}{=} \PY{l+m+mi}{100}
+\PY{n}{dataX} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{dataY} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{n\PYZus{}chars} \PY{o}{\PYZhy{}} \PY{n}{seq\PYZus{}length}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+    \PY{n}{seq\PYZus{}in} \PY{o}{=}  \PY{n}{Key\PYZus{}Text}\PY{p}{[}\PY{n}{i}\PY{p}{:}\PY{n}{i} \PY{o}{+} \PY{n}{seq\PYZus{}length}\PY{p}{]}
+    \PY{n}{seq\PYZus{}out} \PY{o}{=} \PY{n}{Key\PYZus{}Text}\PY{p}{[}\PY{n}{i} \PY{o}{+} \PY{n}{seq\PYZus{}length}\PY{p}{]}
+    \PY{n}{dataX}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{char\PYZus{}to\PYZus{}int}\PY{p}{[}\PY{n}{char}\PY{p}{]} \PY{k}{for} \PY{n}{char} \PY{o+ow}{in} \PY{n}{seq\PYZus{}in}\PY{p}{]}\PY{p}{)}
+    \PY{n}{dataY}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{char\PYZus{}to\PYZus{}int}\PY{p}{[}\PY{n}{seq\PYZus{}out}\PY{p}{]}\PY{p}{)}
+\PY{n}{n\PYZus{}patterns} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{dataX}\PY{p}{)}
+\PY{n+nb}{print} \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total Patterns: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{n\PYZus{}patterns}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Total Patterns:  2698
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{dataX}\PY{p}{,} \PY{p}{(}\PY{n}{n\PYZus{}patterns}\PY{p}{,} \PY{n}{seq\PYZus{}length}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} normalize}
+\PY{n}{X} \PY{o}{=} \PY{n}{X} \PY{o}{/} \PY{n+nb}{float}\PY{p}{(}\PY{n}{n\PYZus{}vocab}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} one hot encode the output variable}
+\PY{n}{y} \PY{o}{=} \PY{n}{np\PYZus{}utils}\PY{o}{.}\PY{n}{to\PYZus{}categorical}\PY{p}{(}\PY{n}{dataY}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{realizamos-nuestra-lstm}{%
+\subsubsection{Realizamos nuestra LSTM}\label{realizamos-nuestra-lstm}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model} \PY{o}{=} \PY{n}{Sequential}\PY{p}{(}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{LSTM}\PY{p}{(}\PY{l+m+mi}{256}\PY{p}{,} \PY{n}{input\PYZus{}shape}\PY{o}{=}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{X}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{return\PYZus{}sequences}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{Dropout}\PY{p}{(}\PY{l+m+mf}{0.2}\PY{p}{)}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{LSTM}\PY{p}{(}\PY{l+m+mi}{256}\PY{p}{)}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{Dropout}\PY{p}{(}\PY{l+m+mf}{0.2}\PY{p}{)}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{Dense}\PY{p}{(}\PY{n}{y}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{softmax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{compile}\PY{p}{(}\PY{n}{loss}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{categorical\PYZus{}crossentropy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{optimizer}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{adam}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{guardamos-un-checkpoint-de-los-mejores-modelos-por-epoca}{%
+\paragraph{Guardamos un checkpoint de los mejores modelos por
+epoca}\label{guardamos-un-checkpoint-de-los-mejores-modelos-por-epoca}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{try}\PY{p}{:}
+    \PY{n}{os}\PY{o}{.}\PY{n}{mkdir}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{checkpoint}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Directory Created}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} 
+\PY{k}{except} \PY{n+ne}{FileExistsError}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Directory already exists}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{filepath}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{checkpoint}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{weights\PYZhy{}improvement\PYZhy{}}\PY{l+s+si}{\PYZob{}loss:.3f\PYZcb{}}\PY{l+s+s2}{.hdf5}\PY{l+s+s2}{\PYZdq{}}
+\PY{n}{checkpoint} \PY{o}{=} \PY{n}{ModelCheckpoint}\PY{p}{(}\PY{n}{filepath}\PY{p}{,} \PY{n}{monitor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{verbose}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{save\PYZus{}best\PYZus{}only}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{mode}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{min}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{callbacks\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{n}{checkpoint}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Directory already exists
+    \end{Verbatim}
+
+    \hypertarget{entrenamos-nuestra-rnn}{%
+\paragraph{Entrenamos nuestra RNN}\label{entrenamos-nuestra-rnn}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{25}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{128}\PY{p}{,} \PY{n}{callbacks}\PY{o}{=}\PY{n}{callbacks\PYZus{}list}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch 1/25
+2698/2698 [==============================] - 27s 10ms/step - loss: 3.1325
+
+Epoch 00001: loss improved from inf to 3.13248, saving model to
+checkpoint\textbackslash{}weights-improvement-3.1325.hdf5
+Epoch 2/25
+2698/2698 [==============================] - 30s 11ms/step - loss: 2.9784
+
+Epoch 00002: loss improved from 3.13248 to 2.97843, saving model to
+checkpoint\textbackslash{}weights-improvement-2.9784.hdf5
+Epoch 3/25
+2698/2698 [==============================] - 33s 12ms/step - loss: 2.9675
+
+Epoch 00003: loss improved from 2.97843 to 2.96749, saving model to
+checkpoint\textbackslash{}weights-improvement-2.9675.hdf5
+Epoch 4/25
+2698/2698 [==============================] - 37s 14ms/step - loss: 2.9579
+
+Epoch 00004: loss improved from 2.96749 to 2.95791, saving model to
+checkpoint\textbackslash{}weights-improvement-2.9579.hdf5
+Epoch 5/25
+2698/2698 [==============================] - 39s 14ms/step - loss: 2.9662
+
+Epoch 00005: loss did not improve from 2.95791
+Epoch 6/25
+2698/2698 [==============================] - 40s 15ms/step - loss: 2.9617
+
+Epoch 00006: loss did not improve from 2.95791
+Epoch 7/25
+2698/2698 [==============================] - 41s 15ms/step - loss: 2.9649
+
+Epoch 00007: loss did not improve from 2.95791
+Epoch 8/25
+2698/2698 [==============================] - 42s 16ms/step - loss: 2.9456
+
+Epoch 00008: loss improved from 2.95791 to 2.94560, saving model to
+checkpoint\textbackslash{}weights-improvement-2.9456.hdf5
+Epoch 9/25
+2698/2698 [==============================] - 46s 17ms/step - loss: 2.9475
+
+Epoch 00009: loss did not improve from 2.94560
+Epoch 10/25
+2698/2698 [==============================] - 44s 16ms/step - loss: 2.9137
+
+Epoch 00010: loss improved from 2.94560 to 2.91372, saving model to
+checkpoint\textbackslash{}weights-improvement-2.9137.hdf5
+Epoch 11/25
+2698/2698 [==============================] - 46s 17ms/step - loss: 2.8695
+
+Epoch 00011: loss improved from 2.91372 to 2.86946, saving model to
+checkpoint\textbackslash{}weights-improvement-2.8695.hdf5
+Epoch 12/25
+2698/2698 [==============================] - 49s 18ms/step - loss: 2.8114
+
+Epoch 00012: loss improved from 2.86946 to 2.81142, saving model to
+checkpoint\textbackslash{}weights-improvement-2.8114.hdf5
+Epoch 13/25
+2698/2698 [==============================] - 42s 16ms/step - loss: 2.7603
+
+Epoch 00013: loss improved from 2.81142 to 2.76026, saving model to
+checkpoint\textbackslash{}weights-improvement-2.7603.hdf5
+Epoch 14/25
+2698/2698 [==============================] - 43s 16ms/step - loss: 2.7161
+
+Epoch 00014: loss improved from 2.76026 to 2.71614, saving model to
+checkpoint\textbackslash{}weights-improvement-2.7161.hdf5
+Epoch 15/25
+2698/2698 [==============================] - 43s 16ms/step - loss: 2.6714
+
+Epoch 00015: loss improved from 2.71614 to 2.67138, saving model to
+checkpoint\textbackslash{}weights-improvement-2.6714.hdf5
+Epoch 16/25
+2698/2698 [==============================] - 43s 16ms/step - loss: 2.6172
+
+Epoch 00016: loss improved from 2.67138 to 2.61718, saving model to
+checkpoint\textbackslash{}weights-improvement-2.6172.hdf5
+Epoch 17/25
+2698/2698 [==============================] - 44s 16ms/step - loss: 2.5458
+
+Epoch 00017: loss improved from 2.61718 to 2.54583, saving model to
+checkpoint\textbackslash{}weights-improvement-2.5458.hdf5
+Epoch 18/25
+2698/2698 [==============================] - 45s 16ms/step - loss: 2.4739
+
+Epoch 00018: loss improved from 2.54583 to 2.47393, saving model to
+checkpoint\textbackslash{}weights-improvement-2.4739.hdf5
+Epoch 19/25
+2698/2698 [==============================] - 45s 17ms/step - loss: 2.3979
+
+Epoch 00019: loss improved from 2.47393 to 2.39788, saving model to
+checkpoint\textbackslash{}weights-improvement-2.3979.hdf5
+Epoch 20/25
+2698/2698 [==============================] - 44s 16ms/step - loss: 2.2942
+
+Epoch 00020: loss improved from 2.39788 to 2.29420, saving model to
+checkpoint\textbackslash{}weights-improvement-2.2942.hdf5
+Epoch 21/25
+2698/2698 [==============================] - 45s 17ms/step - loss: 2.2132
+
+Epoch 00021: loss improved from 2.29420 to 2.21317, saving model to
+checkpoint\textbackslash{}weights-improvement-2.2132.hdf5
+Epoch 22/25
+2698/2698 [==============================] - 45s 17ms/step - loss: 2.1280
+
+Epoch 00022: loss improved from 2.21317 to 2.12800, saving model to
+checkpoint\textbackslash{}weights-improvement-2.1280.hdf5
+Epoch 23/25
+2698/2698 [==============================] - 48s 18ms/step - loss: 2.0131
+
+Epoch 00023: loss improved from 2.12800 to 2.01307, saving model to
+checkpoint\textbackslash{}weights-improvement-2.0131.hdf5
+Epoch 24/25
+2698/2698 [==============================] - 48s 18ms/step - loss: 1.9265
+
+Epoch 00024: loss improved from 2.01307 to 1.92654, saving model to
+checkpoint\textbackslash{}weights-improvement-1.9265.hdf5
+Epoch 25/25
+2698/2698 [==============================] - 48s 18ms/step - loss: 1.8630
+
+Epoch 00025: loss improved from 1.92654 to 1.86303, saving model to
+checkpoint\textbackslash{}weights-improvement-1.8630.hdf5
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<keras.callbacks.callbacks.History at 0x215f0310048>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}best\PYZus{}modeled}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{csv\PYZus{}files}\PY{o}{=}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.hdf5}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{x}\PY{p}{,} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{checkpoint}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{n}{A} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{B} \PY{o}{=}\PY{p}{[}\PY{p}{]}
+    \PY{n}{C}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{csv\PYZus{}files}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{csv\PYZus{}files}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{n}{A}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{csv\PYZus{}files}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+        \PY{n}{B}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{A}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.h}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+        \PY{n}{C}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n+nb}{float}\PY{p}{(}\PY{n}{B}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+    \PY{n}{mini} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{C}\PY{p}{)}
+    \PY{k}{return} \PY{n}{mini}
+\PY{n}{mini} \PY{o}{=} \PY{n}{get\PYZus{}best\PYZus{}modeled}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{filename} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{checkpoint}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{weights\PYZhy{}improvement\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{mini}\PY{p}{)}\PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.hdf5}\PY{l+s+s2}{\PYZdq{}}
+\PY{n}{model}\PY{o}{.}\PY{n}{load\PYZus{}weights}\PY{p}{(}\PY{n}{filename}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{compile}\PY{p}{(}\PY{n}{loss}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{categorical\PYZus{}crossentropy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{optimizer}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{adam}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{realizamos-una-prediccion-de-texto}{%
+\paragraph{Realizamos una prediccion de
+texto}\label{realizamos-una-prediccion-de-texto}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{char\PYZus{}to\PYZus{}ints} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{c}\PY{p}{)} \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{c} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{start} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{dataX}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{pattern} \PY{o}{=} \PY{n}{dataX}\PY{p}{[}\PY{n}{start}\PY{p}{]}
+\PY{n+nb}{print} \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Seed:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print} \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{p}{[}\PY{n}{char\PYZus{}to\PYZus{}ints}\PY{p}{[}\PY{n}{value}\PY{p}{]} \PY{k}{for} \PY{n}{value} \PY{o+ow}{in} \PY{n}{pattern}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} generate characters}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{pattern}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{pattern}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    \PY{n}{x} \PY{o}{=} \PY{n}{x} \PY{o}{/} \PY{n+nb}{float}\PY{p}{(}\PY{n}{n\PYZus{}vocab}\PY{p}{)}
+    \PY{n}{prediction} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{verbose}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+    \PY{n}{index} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{prediction}\PY{p}{)}
+    \PY{n}{result} \PY{o}{=} \PY{n}{char\PYZus{}to\PYZus{}ints}\PY{p}{[}\PY{n}{index}\PY{p}{]}
+    \PY{n}{seq\PYZus{}in} \PY{o}{=} \PY{p}{[}\PY{n}{char\PYZus{}to\PYZus{}ints}\PY{p}{[}\PY{n}{value}\PY{p}{]} \PY{k}{for} \PY{n}{value} \PY{o+ow}{in} \PY{n}{pattern}\PY{p}{]}
+    \PY{n}{sys}\PY{o}{.}\PY{n}{stdout}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{result}\PY{p}{)}
+    \PY{n}{pattern}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{index}\PY{p}{)}
+    \PY{n}{pattern} \PY{o}{=} \PY{n}{pattern}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{n+nb}{len}\PY{p}{(}\PY{n}{pattern}\PY{p}{)}\PY{p}{]}
+\PY{n+nb}{print} \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{ Done.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Seed:
+" der armour sale, under armour jacket, under armour hoodies men's, under armour
+shorts women, under a "
+rmour sooe
+ Done.
+    \end{Verbatim}
+
+    \hypertarget{caso-2}{%
+\subsection{Caso 2}\label{caso-2}}
+
+Nuestra LSTM producirá un nuevo texto carácter por carácter. Tendremos
+que muestrear la letra correcta de las predicciones de la LSTM cada vez.
+La función de muestra acepta los siguientes dos parámetros:
+
+\begin{quote}
+\begin{itemize}
+\tightlist
+\item
+  preds -\textgreater{} Las neuronas de salida.
+\item
+  temperatura: 1.0 es el más conservador, 0.0 es el más arriesgado
+  (dispuesto a cometer errores ortográficos y de otro tipo).
+\end{itemize}
+\end{quote}
+
+La función realiza básicamente básicamenteun softmax en las predicciones
+de la red neuronal. Esto hace que cada neurona de salida se convierta en
+una probabilidad de su letra particular.
+
+    \hypertarget{cargamos-paquete-faltantes.}{%
+\paragraph{Cargamos Paquete
+faltantes.}\label{cargamos-paquete-faltantes.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{callbacks} \PY{k+kn}{import} \PY{n}{LambdaCallback}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{optimizers} \PY{k+kn}{import} \PY{n}{RMSprop}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{utils} \PY{k+kn}{import} \PY{n}{get\PYZus{}file}
+\PY{k+kn}{import} \PY{n+nn}{random}
+\PY{k+kn}{import} \PY{n+nn}{io}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{corpus length:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{processed\PYZus{}text}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{chars} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{processed\PYZus{}text}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{total chars:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}
+\PY{n}{char\PYZus{}indices} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{(}\PY{n}{c}\PY{p}{,} \PY{n}{i}\PY{p}{)} \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{c} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}
+\PY{n}{indices\PYZus{}char} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{c}\PY{p}{)} \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{c} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+corpus length: 2798
+total chars: 26
+    \end{Verbatim}
+
+    \hypertarget{revisamos-cuantas-subsecuencias-de-palabras-podemos-generar-de-nuestra-lista-de-keywords.}{%
+\paragraph{Revisamos cuantas subsecuencias de palabras podemos generar
+de nuestra lista de
+Keywords.}\label{revisamos-cuantas-subsecuencias-de-palabras-podemos-generar-de-nuestra-lista-de-keywords.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{maxlen} \PY{o}{=} \PY{l+m+mi}{20}
+\PY{n}{step} \PY{o}{=} \PY{l+m+mi}{3}
+\PY{n}{sentences} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{next\PYZus{}chars} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{processed\PYZus{}text}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{maxlen}\PY{p}{,} \PY{n}{step}\PY{p}{)}\PY{p}{:}
+    \PY{n}{sentences}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{processed\PYZus{}text}\PY{p}{[}\PY{n}{i}\PY{p}{:} \PY{n}{i} \PY{o}{+} \PY{n}{maxlen}\PY{p}{]}\PY{p}{)}
+    \PY{n}{next\PYZus{}chars}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{processed\PYZus{}text}\PY{p}{[}\PY{n}{i} \PY{o}{+} \PY{n}{maxlen}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nb sequences:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{sentences}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+nb sequences: 926
+    \end{Verbatim}
+
+    \hypertarget{vectorizamos-nuestras-keywords.}{%
+\paragraph{Vectorizamos nuestras
+Keywords.}\label{vectorizamos-nuestras-keywords.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vectorization...}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sentences}\PY{p}{)}\PY{p}{,} \PY{n}{maxlen}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{bool}\PY{p}{)}
+\PY{n}{y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sentences}\PY{p}{)}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{bool}\PY{p}{)}
+\PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{sentence} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{sentences}\PY{p}{)}\PY{p}{:}
+    \PY{k}{for} \PY{n}{t}\PY{p}{,} \PY{n}{char} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{sentence}\PY{p}{)}\PY{p}{:}
+        \PY{n}{x}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{char\PYZus{}indices}\PY{p}{[}\PY{n}{char}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1}
+    \PY{n}{y}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{char\PYZus{}indices}\PY{p}{[}\PY{n}{next\PYZus{}chars}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Vectorization{\ldots}
+    \end{Verbatim}
+
+    \hypertarget{construimos-nuestro-modelo-lstm.}{%
+\paragraph{Construimos nuestro modelo
+LSTM.}\label{construimos-nuestro-modelo-lstm.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} build the model: a single LSTM}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Build model...}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{model} \PY{o}{=} \PY{n}{Sequential}\PY{p}{(}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{LSTM}\PY{p}{(}\PY{l+m+mi}{128}\PY{p}{,} \PY{n}{input\PYZus{}shape}\PY{o}{=}\PY{p}{(}\PY{n}{maxlen}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{n}{Dense}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{softmax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{optimizer} \PY{o}{=} \PY{n}{RMSprop}\PY{p}{(}\PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{)}
+\PY{n}{model}\PY{o}{.}\PY{n}{compile}\PY{p}{(}\PY{n}{loss}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{categorical\PYZus{}crossentropy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{optimizer}\PY{o}{=}\PY{n}{optimizer}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Build model{\ldots}
+    \end{Verbatim}
+
+    \hypertarget{revisamos-la-arquitectura-de-nuestra-lstm.}{%
+\paragraph{Revisamos la arquitectura de nuestra
+LSTM.}\label{revisamos-la-arquitectura-de-nuestra-lstm.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{model}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Model: "sequential\_2"
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+Layer (type)                 Output Shape              Param \#
+=================================================================
+lstm\_3 (LSTM)                (None, 128)               79360
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+dense\_2 (Dense)              (None, 26)                3354
+=================================================================
+Total params: 82,714
+Trainable params: 82,714
+Non-trainable params: 0
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+    \end{Verbatim}
+
+    \hypertarget{auxf1adimos-las-variables-preds-y-temperature}{%
+\subsubsection{Añadimos las variables preds y
+temperature}\label{auxf1adimos-las-variables-preds-y-temperature}}
+
+Esto nos permite cambiar las probabilidades por cada letra desde un modo
+conservador hasta lo más arriesgado.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{sample}\PY{p}{(}\PY{n}{preds}\PY{p}{,} \PY{n}{temperature}\PY{o}{=}\PY{l+m+mf}{1.0}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} helper function to sample an index from a probability array}
+    \PY{n}{preds} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{asarray}\PY{p}{(}\PY{n}{preds}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{float64}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{preds} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{preds}\PY{p}{)} \PY{o}{/} \PY{n}{temperature}
+    \PY{n}{exp\PYZus{}preds} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{n}{preds}\PY{p}{)}
+    \PY{n}{preds} \PY{o}{=} \PY{n}{exp\PYZus{}preds} \PY{o}{/} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{exp\PYZus{}preds}\PY{p}{)}
+    \PY{n}{probas} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{multinomial}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{preds}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{probas}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{la-funcion-on_epoch_end-nos-va-a-permitir-imprimir-una-generacion-de-texto-por-epoca-iterando-sobre-las-temperaturas-y-los-preds}{%
+\paragraph{La funcion on\_epoch\_end nos va a permitir imprimir una
+generacion de texto por epoca iterando sobre las temperaturas y los
+preds}\label{la-funcion-on_epoch_end-nos-va-a-permitir-imprimir-una-generacion-de-texto-por-epoca-iterando-sobre-las-temperaturas-y-los-preds}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{on\PYZus{}epoch\PYZus{}end}\PY{p}{(}\PY{n}{epoch}\PY{p}{,} \PY{n}{\PYZus{}}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Function invoked at end of each epoch. Prints generated text.}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{****************************************************************************}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Generating text after Epoch: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{epoch}\PY{p}{)}
+
+    \PY{n}{start\PYZus{}index} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{30}\PY{p}{)}
+    \PY{k}{for} \PY{n}{temperature} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{1.0}\PY{p}{]}\PY{p}{:}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} temperature:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{temperature}\PY{p}{)}
+
+        \PY{n}{generated} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{sentence} \PY{o}{=} \PY{n}{processed\PYZus{}text}\PY{p}{[}\PY{n}{start\PYZus{}index}\PY{p}{:} \PY{n}{start\PYZus{}index} \PY{o}{+} \PY{n}{maxlen}\PY{p}{]}
+        \PY{n}{generated} \PY{o}{+}\PY{o}{=} \PY{n}{sentence}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{} Generating with seed: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{sentence} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{sys}\PY{o}{.}\PY{n}{stdout}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{generated}\PY{p}{)}
+
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{50}\PY{p}{)}\PY{p}{:}
+            \PY{n}{x\PYZus{}pred} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{maxlen}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{chars}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+            \PY{k}{for} \PY{n}{t}\PY{p}{,} \PY{n}{char} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{sentence}\PY{p}{)}\PY{p}{:}
+                \PY{n}{x\PYZus{}pred}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{t}\PY{p}{,} \PY{n}{char\PYZus{}indices}\PY{p}{[}\PY{n}{char}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{1.}
+
+            \PY{n}{preds} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{x\PYZus{}pred}\PY{p}{,} \PY{n}{verbose}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{n}{next\PYZus{}index} \PY{o}{=} \PY{n}{sample}\PY{p}{(}\PY{n}{preds}\PY{p}{,} \PY{n}{temperature}\PY{p}{)}
+            \PY{n}{next\PYZus{}char} \PY{o}{=} \PY{n}{indices\PYZus{}char}\PY{p}{[}\PY{n}{next\PYZus{}index}\PY{p}{]}
+
+            \PY{n}{generated} \PY{o}{+}\PY{o}{=} \PY{n}{next\PYZus{}char}
+            \PY{n}{sentence} \PY{o}{=} \PY{n}{sentence}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]} \PY{o}{+} \PY{n}{next\PYZus{}char}
+
+            \PY{n}{sys}\PY{o}{.}\PY{n}{stdout}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{next\PYZus{}char}\PY{p}{)}
+            \PY{n}{sys}\PY{o}{.}\PY{n}{stdout}\PY{o}{.}\PY{n}{flush}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{lamda-callback}{%
+\subsubsection{Lamda Callback}\label{lamda-callback}}
+
+Un Callback puede realizar acciones en varias etapas del entrenamiento
+(por ejemplo, al comienzo o al final de una época, antes o después de un
+solo lote, etc.).
+
+Se pueden usar Callbacks para:
+
+\begin{itemize}
+\tightlist
+\item
+  Escribir registros de TensorBoard después de cada lote de
+  entrenamiento para monitorear sus métricas
+\item
+  Periódicamente guarde su modelo en el disco
+\item
+  Haz paradas tempranas
+\item
+  Obtener una vista de los estados internos y las estadísticas de un
+  modelo durante el entrenamiento
+\end{itemize}
+
+De esta forma lo podemos utilizar como:
+
+\begin{quote}
+tf.keras.callbacks.LambdaCallback( on\_epoch\_begin=None,
+on\_epoch\_end=None, on\_batch\_begin=None, on\_batch\_end=None,
+on\_train\_begin=None, on\_train\_end=None, **kwargs )
+\end{quote}
+
+\textbf{En este caso vamos a utilizar LambdaCallback para imprimir
+nuestra las predicciones hechas en la funcion on\_epoch\_end al final de
+cada entrenamiento de época}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} See https://github.com/tensorflow/tensorflow/issues/31308}
+\PY{k+kn}{import} \PY{n+nn}{logging}\PY{o}{,} \PY{n+nn}{os}
+\PY{n}{logging}\PY{o}{.}\PY{n}{disable}\PY{p}{(}\PY{n}{logging}\PY{o}{.}\PY{n}{WARNING}\PY{p}{)}
+\PY{n}{os}\PY{o}{.}\PY{n}{environ}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{TF\PYZus{}CPP\PYZus{}MIN\PYZus{}LOG\PYZus{}LEVEL}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{3}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{c+c1}{\PYZsh{} Fit the model}
+\PY{n}{print\PYZus{}callback} \PY{o}{=} \PY{n}{LambdaCallback}\PY{p}{(}\PY{n}{on\PYZus{}epoch\PYZus{}end}\PY{o}{=}\PY{n}{on\PYZus{}epoch\PYZus{}end}\PY{p}{)}
+
+\PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,}
+          \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{128}\PY{p}{,}
+          \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{25}\PY{p}{,}
+          \PY{n}{callbacks}\PY{o}{=}\PY{p}{[}\PY{n}{print\PYZus{}callback}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch 1/25
+926/926 [==============================] - 1s 797us/step - loss: 3.1668
+****************************************************************************
+----- Generating text after Epoch: 0
+----- temperature: 0.2
+----- Generating with seed: "hoes  nike outlet  n"
+hoes  nike outlet  naaaaaaaasaasaasaaaaaaaaaaaaa aaa aaaaaaaaaaaaaaaaa
+----- temperature: 0.5
+----- Generating with seed: "hoes  nike outlet  n"
+hoes  nike outlet  nessaaaaa assasaaaa aaausaaaand asa a aada aaaaas a
+----- temperature: 1.0
+----- Generating with seed: "hoes  nike outlet  n"
+hoes  nike outlet  n ieshsa snvaoeasera  nsa cdisaa  pdsuso uapdsaa me
+Epoch 2/25
+926/926 [==============================] - 1s 569us/step - loss: 2.7395
+****************************************************************************
+----- Generating text after Epoch: 1
+----- temperature: 0.2
+----- Generating with seed: "e shoes  nike outlet"
+e shoes  nike outlet r   s  r  r       s           n         n
+----- temperature: 0.5
+----- Generating with seed: "e shoes  nike outlet"
+e shoes  nike outletuossnusar  s    rc g ms     m ssss ror  r s sr sa
+----- temperature: 1.0
+----- Generating with seed: "e shoes  nike outlet"
+e shoes  nike outletessuarsuri stpusre ain ao  tg  ortn  gnjjlrpm brmp
+Epoch 3/25
+926/926 [==============================] - 1s 570us/step - loss: 2.6737
+****************************************************************************
+----- Generating text after Epoch: 2
+----- temperature: 0.2
+----- Generating with seed: "e shoes  nike outlet"
+e shoes  nike outlet
+----- temperature: 0.5
+----- Generating with seed: "e shoes  nike outlet"
+e shoes  nike outlet   a  a    t athsa      aae u     a sai   m ae   a
+----- temperature: 1.0
+----- Generating with seed: "e shoes  nike outlet"
+e shoes  nike outlet ve   art hmh  et  nad  l tps u ltt  ros  dtot a e
+Epoch 4/25
+926/926 [==============================] - 1s 577us/step - loss: 2.5974
+****************************************************************************
+----- Generating text after Epoch: 3
+----- temperature: 0.2
+----- Generating with seed: "nike outlet  nike ho"
+nike outlet  nike ho
+----- temperature: 0.5
+----- Generating with seed: "nike outlet  nike ho"
+nike outlet  nike ho   w ms    la     mhoe a  a o oa uoae s  s ua  pum
+----- temperature: 1.0
+----- Generating with seed: "nike outlet  nike ho"
+nike outlet  nike hoa jteooes n tuurnslemhhosorusma  o r al leimsvgeu
+Epoch 5/25
+926/926 [==============================] - 1s 564us/step - loss: 2.4578
+****************************************************************************
+----- Generating text after Epoch: 4
+----- temperature: 0.2
+----- Generating with seed: "e outlet  nike hoodi"
+e outlet  nike hoodida aaamamaaa aaaaaamaaamaaamaaamaaaaauamaamaaaaaaa
+----- temperature: 0.5
+----- Generating with seed: "e outlet  nike hoodi"
+e outlet  nike hoodia  ma aadaa aaaamarr amauammummaaa amadum a amaaaa
+----- temperature: 1.0
+----- Generating with seed: "e outlet  nike hoodi"
+e outlet  nike hoodiouuidr momeadaadama  mtmua umrak  m mar oaaammaoma
+Epoch 6/25
+926/926 [==============================] - 1s 562us/step - loss: 2.3093
+****************************************************************************
+----- Generating text after Epoch: 5
+----- temperature: 0.2
+----- Generating with seed: "es  nike outlet  nik"
+es  nike outlet  nike   eeis   ees   ooee    eee   ee    eoe   eee   o
+----- temperature: 0.5
+----- Generating with seed: "es  nike outlet  nik"
+es  nike outlet  nike   oedes  aeos    ees  leis  eadees  eone  eees
+----- temperature: 1.0
+----- Generating with seed: "es  nike outlet  nik"
+es  nike outlet  niks oeidts  adn  iea moaestes houls haes arsoeaes
+Epoch 7/25
+926/926 [==============================] - 1s 560us/step - loss: 2.1689
+****************************************************************************
+----- Generating text after Epoch: 6
+----- temperature: 0.2
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outs  anes  aat s ants aats  ant   aans  aat  aans  a
+----- temperature: 0.5
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outs untess aomers nas  aroas   ants  aages nans  ans
+----- temperature: 1.0
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outi saraje   eneriss  hnes rnne  adist aacthts na s
+Epoch 8/25
+926/926 [==============================] - 1s 578us/step - loss: 1.9919
+****************************************************************************
+----- Generating text after Epoch: 7
+----- temperature: 0.2
+----- Generating with seed: "let  nike hoodie  ni"
+let  nike hoodie  niras   aroor   aroors  paroor   aroors   aroors  ar
+----- temperature: 0.5
+----- Generating with seed: "let  nike hoodie  ni"
+let  nike hoodie  niras  aroir   nanr   aroor   rroor s  roors  es  oo
+----- temperature: 1.0
+----- Generating with seed: "let  nike hoodie  ni"
+let  nike hoodie  nier smocg la  araoirarr rooodc s urmoarar  vomra  a
+Epoch 9/25
+926/926 [==============================] - 1s 568us/step - loss: 1.8708
+****************************************************************************
+----- Generating text after Epoch: 8
+----- temperature: 0.2
+----- Generating with seed: "s  nike outlet  nike"
+s  nike outlet  nikes  unders s  nieas punders  ndert  under  under  r
+----- temperature: 0.5
+----- Generating with seed: "s  nike outlet  nike"
+s  nike outlet  niker lint  nnee   umets s neder sledts  ndees under a
+----- temperature: 1.0
+----- Generating with seed: "s  nike outlet  nike"
+s  nike outlet  nikes uidet  shteat    nder s shituts nrmorasour uns p
+Epoch 10/25
+926/926 [==============================] - 1s 556us/step - loss: 1.6696
+****************************************************************************
+----- Generating text after Epoch: 9
+----- temperature: 0.2
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outas aadidas aaalevis  araounder aarour  adeas aroou
+----- temperature: 0.5
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outsearounder aroour aadaraaoounder arat   anderaaa o
+----- temperature: 1.0
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outaes shevidar ajacasoode  roiigs  naraemor t nea aa
+Epoch 11/25
+926/926 [==============================] - 1s 556us/step - loss: 1.5411
+****************************************************************************
+----- Generating text after Epoch: 10
+----- temperature: 0.2
+----- Generating with seed: "tlet  nike hoodie  n"
+tlet  nike hoodie  nide  aroour  aroour  aroour  aroour    levis   adi
+----- temperature: 0.5
+----- Generating with seed: "tlet  nike hoodie  n"
+tlet  nike hoodie  nide  arioue  under aroour  thoes  aroole    uole
+----- temperature: 1.0
+----- Generating with seed: "tlet  nike hoodie  n"
+tlet  nike hoodie  noole  aoooh s bariea  hoode sachoeu   levis  hooe
+Epoch 12/25
+926/926 [==============================] - 1s 553us/step - loss: 1.3715
+****************************************************************************
+----- Generating text after Epoch: 11
+----- temperature: 0.2
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outlers  aoolina  anider  aroour s   nike s ooolina
+----- temperature: 0.5
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outlers levis    ooes  neis     oools spacts ciks  oo
+----- temperature: 1.0
+----- Generating with seed: "nike shoes  nike out"
+nike shoes  nike outs  ndirtshogtk rooidnr    oooide s oooin  shooon
+Epoch 13/25
+926/926 [==============================] - 1s 583us/step - loss: 1.2091
+****************************************************************************
+----- Generating text after Epoch: 12
+----- temperature: 0.2
+----- Generating with seed: "hoes  nike outlet  n"
+hoes  nike outlet  nididas   under aroour s     levis  arolinas  nider
+----- temperature: 0.5
+----- Generating with seed: "hoes  nike outlet  n"
+hoes  nike outlet  nididas soooiss  nider sooois   noers  arooins
+----- temperature: 1.0
+----- Generating with seed: "hoes  nike outlet  n"
+hoes  nike outlet  nigdes  rolinss bonde  armooss s  uidar aroouns ban
+Epoch 14/25
+926/926 [==============================] - 1s 577us/step - loss: 1.1217
+****************************************************************************
+----- Generating text after Epoch: 13
+----- temperature: 0.2
+----- Generating with seed: " outlet  nike hoodie"
+ outlet  nike hoodie  ander armour  adidas  adidas  adidas panthers  u
+----- temperature: 0.5
+----- Generating with seed: " outlet  nike hoodie"
+ outlet  nike hoodiea pundersaroour  anieas arolina pant ers  adidas p
+----- temperature: 1.0
+----- Generating with seed: " outlet  nike hoodie"
+ outlet  nike hoodiens levis  ander sarts  mengse sns hondees hors  ro
+Epoch 15/25
+926/926 [==============================] - 1s 602us/step - loss: 1.0028
+****************************************************************************
+----- Generating text after Epoch: 14
+----- temperature: 0.2
+----- Generating with seed: " nike outlet  nike h"
+ nike outlet  nike hoolie  arllec  arllev  arolina panthers  under arm
+----- temperature: 0.5
+----- Generating with seed: " nike outlet  nike h"
+ nike outlet  nike hoolina puml  carolina pandlevs jen  arlea  ardlea
+----- temperature: 1.0
+----- Generating with seed: " nike outlet  nike h"
+ nike outlet  nike horder hola  under aroluns lens sunler  under arthl
+Epoch 16/25
+926/926 [==============================] - 1s 559us/step - loss: 0.8657
+****************************************************************************
+----- Generating text after Epoch: 15
+----- temperature: 0.2
+----- Generating with seed: "tlet  nike hoodie  n"
+tlet  nike hoodie  nike woouiina pamthens  adidas armoun  adidas puman
+----- temperature: 0.5
+----- Generating with seed: "tlet  nike hoodie  n"
+tlet  nike hoodie  nike swoatshers  adidas womina pammoun  ander armou
+----- temperature: 1.0
+----- Generating with seed: "tlet  nike hoodie  n"
+tlet  nike hoodie  nnker armour padts lect  cide  leathiit cate   adho
+Epoch 17/25
+926/926 [==============================] - 1s 568us/step - loss: 0.8061
+****************************************************************************
+----- Generating text after Epoch: 16
+----- temperature: 0.2
+----- Generating with seed: "  nike hoodie  nike "
+  nike hoodie  nike shirt      arolina panthers  carolina panthers  ca
+----- temperature: 0.5
+----- Generating with seed: "  nike hoodie  nike "
+  nike hoodie  nike shirt     pacthirt   puma shiatshirt     arolina p
+----- temperature: 1.0
+----- Generating with seed: "  nike hoodie  nike "
+  nike hoodie  nike sherthir   weatshiri  liggshirtst s swsathirts  di
+Epoch 18/25
+926/926 [==============================] - 1s 547us/step - loss: 0.6893
+****************************************************************************
+----- Generating text after Epoch: 17
+----- temperature: 0.2
+----- Generating with seed: "nike  nike shoes  ni"
+nike  nike shoes  nike swoatshirt  nike swoats  under armour  under ar
+----- temperature: 0.5
+----- Generating with seed: "nike  nike shoes  ni"
+nike  nike shoes  nike swoatsuni  under armour sthers ccooun  nike swo
+----- temperature: 1.0
+----- Generating with seed: "nike  nike shoes  ni"
+nike  nike shoes  nike wumanshoes  under armour ets mund s  actluru cu
+Epoch 19/25
+926/926 [==============================] - 1s 549us/step - loss: 0.6372
+****************************************************************************
+----- Generating text after Epoch: 18
+----- temperature: 0.2
+----- Generating with seed: "et  nike hoodie  nik"
+et  nike hoodie  nike shoes fen  anidas pacts  nike shoes fen  anidas
+----- temperature: 0.5
+----- Generating with seed: "et  nike hoodie  nik"
+et  nike hoodie  nike  under armour hoodie  levis  anidas sacts  puma
+----- temperature: 1.0
+----- Generating with seed: "et  nike hoodie  nik"
+et  nike hoodie  nike sunar acadiuanher  acdarouunkermoudleggorgggrg b
+Epoch 20/25
+926/926 [==============================] - 1s 550us/step - loss: 0.5511
+****************************************************************************
+----- Generating text after Epoch: 19
+----- temperature: 0.2
+----- Generating with seed: "e outlet  nike hoodi"
+e outlet  nike hoodie  nder armour hoodie  nder armour hoodie  nike sw
+----- temperature: 0.5
+----- Generating with seed: "e outlet  nike hoodi"
+e outlet  nike hoodie  nike shoes ens  nike swoetsoodie  nike swoetsen
+----- temperature: 1.0
+----- Generating with seed: "e outlet  nike hoodi"
+e outlet  nike hoodien carolling shoer  adidastooue kers copum  caroou
+Epoch 21/25
+926/926 [==============================] - 1s 571us/step - loss: 0.4957
+****************************************************************************
+----- Generating text after Epoch: 20
+----- temperature: 0.2
+----- Generating with seed: "nike outlet  nike ho"
+nike outlet  nike hoodie  nike hoodie  nike hoodie  nike hoodie  nike
+----- temperature: 0.5
+----- Generating with seed: "nike outlet  nike ho"
+nike outlet  nike hoodie  nike hoodie  olle  adidas armour homes  ader
+----- temperature: 1.0
+----- Generating with seed: "nike outlet  nike ho"
+nike outlet  nike hoodie  niket ooole  underwarmour kens  radhors  aro
+Epoch 22/25
+926/926 [==============================] - 1s 591us/step - loss: 0.4273
+****************************************************************************
+----- Generating text after Epoch: 21
+----- temperature: 0.2
+----- Generating with seed: "t  nike hoodie  nike"
+t  nike hoodie  nike hoodie  nder  under armour hoodies  under armour
+----- temperature: 0.5
+----- Generating with seed: "t  nike hoodie  nike"
+t  nike hoodie  nike hoodie  nder  under armour hoodies  under armour
+----- temperature: 1.0
+----- Generating with seed: "t  nike hoodie  nike"
+t  nike hoodie  nike lordien  didas wemanss nurter  oodidas  levis  ho
+Epoch 23/25
+926/926 [==============================] - 1s 596us/step - loss: 0.4387
+****************************************************************************
+----- Generating text after Epoch: 22
+----- temperature: 0.2
+----- Generating with seed: "outlet  nike hoodie "
+outlet  nike hoodie  nike   under armour hoodies  under armour  under
+----- temperature: 0.5
+----- Generating with seed: "outlet  nike hoodie "
+outlet  nike hoodie  nike shoes fur  nike   under armour hoodies  unde
+----- temperature: 1.0
+----- Generating with seed: "outlet  nike hoodie "
+outlet  nike hoodie  nike s jens  bens  levis   jevis  nike sweatlinss
+Epoch 24/25
+926/926 [==============================] - ETA: 0s - loss: 0.365 - 1s 639us/step
+- loss: 0.3627
+****************************************************************************
+----- Generating text after Epoch: 23
+----- temperature: 0.2
+----- Generating with seed: "ike shoes  nike outl"
+ike shoes  nike outler  aroouik  arooui  aroour shoes  under armour sh
+----- temperature: 0.5
+----- Generating with seed: "ike shoes  nike outl"
+ike shoes  nike outler arolina panthers ceroui  arooui  levis  unkeroa
+----- temperature: 1.0
+----- Generating with seed: "ike shoes  nike outl"
+ike shoes  nike outler  puma luvn  javis levis  levis dents backetlear
+Epoch 25/25
+926/926 [==============================] - 1s 624us/step - loss: 0.2981
+****************************************************************************
+----- Generating text after Epoch: 24
+----- temperature: 0.2
+----- Generating with seed: "ike outlet  nike hoo"
+ike outlet  nike hoodies men  anders shorts  under armour sthers short
+----- temperature: 0.5
+----- Generating with seed: "ike outlet  nike hoo"
+ike outlet  nike hoodies  underwarmour hootsess shorts  under armour m
+----- temperature: 1.0
+----- Generating with seed: "ike outlet  nike hoo"
+ike outlet  nike hoodies jeaneans puma thors sume sagts  nike swoatsun
+    \end{Verbatim}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<keras.callbacks.callbacks.History at 0x215874b5808>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{retos}{%
+\subsection{Retos:}\label{retos}}
+
+\#\#\# Añadir Money Keywords, Son aquellas que no solo atraen clientes
+potenciales directamente al sitio, sino que también atraen a los
+clientes potenciales correctos a su sitio: los clientes que sacarán su
+tarjeta de crédito y pagarán dinero.
+
+\textbf{Por ejemplo}
+
+Oferta, Préstamos, Hipoteca, Crédito, Hospedaje y Reclamación
+
+\#\#\# Implementar el Keyword Research en un sitio web Al momento de
+implementar las palabras generadas en un sitio web, podremos observar y
+cuantizar sus resultados en los buscadores
+
+    \hypertarget{conclusiuxf3n}{%
+\subsection{Conclusión}\label{conclusiuxf3n}}
+
+El proyecto de Keyword Research nos permitió conocer cual es la
+verdadera labor del SEO y su importancia en el Marketing Digital para
+sitios web, es un gran ejercicio para aprender sobre scrapping con
+Selenium, manejar archivos del sistema e incluso aprender sobre el
+verdadero significado de Marketing y varias de sus estrategias para
+lograr acercar lo mejor posible servicios y sitios web a clientes
+potenciales.
+
+Realizar KeyWord Research a traves de Python y con ayuda de Machine
+Learning, es un campo con muchas ideas por explorar y poco
+desarrolladas, y que con más trabajo se pueden realizar algoritmos muy
+eficientes para un posicionamiento Web orgánico.
+
+Todos estos proyectos nos permiten conocer nuevos algoritmos,
+trabajarlos y entenderlos de la mejor forma, además, estamos aprendiendo
+sobre el contexto en que podemos aplicar estos, entender las
+caracteristicas de las diferentes formas de aplicar Machine Learning en
+varias temáticas de todo tipo.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
